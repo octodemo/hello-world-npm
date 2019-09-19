@@ -22,25 +22,12 @@ jobs:
       - name: npm publish  
         run: |
           npm config set //registry.npmjs.org/:_authToken=$NODE_AUTH_TOKEN
-          npm publish || true
+#          npm publish || true
         env:
           CI: true
           NODE_AUTH_TOKEN: ${{ secrets.npm_token }}
 
 
-
-  publish-npm:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:   
-      - uses: actions/checkout@v1
-      - uses: actions/setup-node@v1
-      - uses: actions/npm@master
-        env:
-         NODE_AUTH_TOKEN: ${{secrets.npm_token}}
-         GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
-        with:
-         args: publish 
 
     
   publish-gpr:
@@ -56,3 +43,17 @@ jobs:
       - run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
+
+
+  publish-npm:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:   
+      - uses: actions/checkout@v1
+      - uses: actions/setup-node@v1
+      - uses: actions/npm@master
+        env:
+         NODE_AUTH_TOKEN: ${{secrets.npm_token}}
+         GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+        with:
+         args: publish 
