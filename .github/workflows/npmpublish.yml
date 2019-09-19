@@ -23,7 +23,7 @@ jobs:
         run: |
           npm config set //registry.npmjs.org/:_authToken=$NODE_AUTH_TOKEN
           npm config set scope '@ravigadhia' --global
-#          npm publish || true
+          npm publish || true
         env:
           CI: true
           NODE_AUTH_TOKEN: ${{ secrets.npm_token }}
