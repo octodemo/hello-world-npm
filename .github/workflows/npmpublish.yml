@@ -16,22 +16,21 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: 12
+      - run: npm install  
       - run: npm ci
-      - run: npm test
-
-  publish-npm:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v1
-      - uses: actions/setup-node@v1
-        with:
-          node-version: 12
-          registry-url: https://registry.npmjs.org/
-      - run: npm publish
+#      - run: npm test
+      - name: npm publish  
+        run: |
+          npm config set registry https://registry.npmjs.org/:_authToken=$NODE_AUTH_TOKEN
+          npm config set scope '@ravigadhia' --global
+          npm publish || true
         env:
-          NODE_AUTH_TOKEN: ${{secrets.npm_token}}
+          CI: true
+          NODE_AUTH_TOKEN: ${{ secrets.npm_token }}
 
+
+
+    
   publish-gpr:
     needs: build
     runs-on: ubuntu-latest
@@ -41,7 +40,21 @@ jobs:
         with:
           node-version: 12
           registry-url: https://npm.pkg.github.com/
-          scope: '@your-github-username'
+          scope: '@ravigadhia'
       - run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
+
+
+  publish-npm:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:   
+      - uses: actions/checkout@v1
+      - uses: actions/setup-node@v1
+      - uses: actions/npm@master
+        env:
+         NODE_AUTH_TOKEN: ${{secrets.npm_token}}
+         GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+        with:
+         args: publish 
