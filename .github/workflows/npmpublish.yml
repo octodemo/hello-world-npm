@@ -12,7 +12,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v1
       - uses: actions/setup-node@v1
         with:
           node-version: 12
@@ -35,7 +35,7 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v1
       - uses: actions/setup-node@v1
         with:
           node-version: 12
@@ -46,26 +46,15 @@ jobs:
           NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
 
 
-
-
   publish-npm:
     needs: build
     runs-on: ubuntu-latest
     steps:   
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v1
       - uses: actions/setup-node@v1
-        with:
-          node-version: 12
-          registry-url: https://registry.npmjs.org/
-#      - run: npm ci
-      - run: |
-          npm config set registry https://registry.npmjs.org/:_authToken=$NODE_AUTH_TOKEN
-          npm config set scope '@ravigadhia' --global
-          npm publish || true
+      - uses: actions/npm@master
         env:
-          NODE_AUTH_TOKEN: ${{secrets.npm_token}}    
-         
-     
-       
-
- 
+         NODE_AUTH_TOKEN: ${{secrets.npm_token}}
+         GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+        with:
+         args: publish 
