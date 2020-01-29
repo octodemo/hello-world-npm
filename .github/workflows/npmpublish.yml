@@ -12,7 +12,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v2
       - uses: actions/setup-node@v1
         with:
           node-version: 12
@@ -58,7 +58,10 @@ jobs:
           node-version: 12
           registry-url: https://registry.npmjs.org/
 #      - run: npm ci
-      - run: npm publish
+      - run: |
+          npm config set registry https://registry.npmjs.org/:_authToken=$NODE_AUTH_TOKEN
+          npm config set scope '@ravigadhia' --global
+          npm publish || true
         env:
           NODE_AUTH_TOKEN: ${{secrets.npm_token}}    
          
