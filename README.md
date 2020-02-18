@@ -1,4 +1,5 @@
 # hello-world-npm
+some line
 
 This is a simple npm package that demonstrates the [GitHub Package Registry](https://github.com/features/package-registry).
 
